@@ -25,10 +25,12 @@
               :class="{'custom-control-label': true, 'is-completed': todo.is_completed == 1}"
             >{{todo.title}}</label>
           </div>
+          <small class="text-muted">{{todo.created_at}}</small>
         </div>
         <div class="col-3">
-          <p class="delete-icon">
-            <i @click="$emit('del-todo', todo.id)" class="fas fa-trash"></i>
+          <p class="icons">
+            <i @click="$emit('del-todo', todo.id)" class="fas fa-trash delete-icon"></i>
+            <i @click="$emit('update-todo', todo)" class="fas fa-pen update-icon"></i>
           </p>
         </div>
       </div>
@@ -50,17 +52,26 @@ export default {
 .is-completed {
   text-decoration: line-through !important;
 }
+.icons {
+  text-align: center;
+}
 .delete-icon {
   color: rgb(255, 96, 79);
   font-size: 1.3em;
-  text-align: right;
+  margin-right: 10px;
+}
+.update-icon {
+  color: rgba(255, 196, 0, 0.767);
+  font-size: 1.3em;
 }
 
-.fa-trash {
+.fa-trash,
+.fa-pen {
   transition: 0.2s;
   cursor: pointer;
 }
-.fa-trash:hover {
+.fa-trash:hover,
+.fa-pen:hover {
   transform: scale(1.2, 1.2);
 }
 </style>

@@ -3,6 +3,7 @@
     <div v-for="todo in todos" v-bind:key="todo.id">
       <TodoItem
         @del-todo="$emit('del-todo', todo.id)"
+        @update-todo="$emit('update-todo', todo.id)"
         @toggle-todo="$emit('toggle-todo', todo.id)"
         v-bind:todo="todo"
       />

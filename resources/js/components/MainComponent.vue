@@ -11,14 +11,26 @@
     <div class="container">
       <br />
       <div class="row justify-content-center">
-        <div class="col-lg-6">
-          <CreateTodo />
+        <div class="px-0 col-lg-6">
+          <div class="shadow card" style="border:none; padding:10px 30px">
+            <CreateTodo @create-todo="createTodo" />
+            <!-- Completed/Total -->
+            <p>
+              Completed:
+              <span>{{completed_todos}} / {{total_todos}}</span>
+            </p>
+          </div>
         </div>
       </div>
       <br />
       <div class="row justify-content-center">
         <div class="shadow main-wrapper col-lg-6">
-          <TodoList @del-todo="delTodo" @toggle-todo="toggleTodo" v-bind:todos="todos" />
+          <TodoList
+            @update-todo="updateTodo"
+            @del-todo="delTodo"
+            @toggle-todo="toggleTodo"
+            v-bind:todos="todos"
+          />
         </div>
       </div>
     </div>
@@ -45,6 +57,18 @@ export default {
     return {
       todos: {}
     };
+  },
+  computed: {
+    completed_todos: function() {
+      if (this.todos.length > 0) {
+        return this.todos.filter(todo => {
+          return todo.is_completed == 1;
+        }).length;
+      }
+    },
+    total_todos: function() {
+      return this.todos.length;
+    }
   },
   methods: {
     fetchTodos() {
@@ -78,6 +102,24 @@ export default {
           console.log(err);
           alert("An Error has Occured! Please try again");
         });
+    },
+    createTodo(todo) {
+      $(".overlay").css("display", "block");
+      fetch("api/todos", {
+        method: "POST",
+        body: JSON.stringify(todo),
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(res => {
+          this.fetchTodos();
+        })
+        .catch(err => console.log(err));
+    },
+    updateTodo(todo) {
+      $(".");
     }
   }
 };

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Todo extends JsonResource
@@ -17,7 +18,9 @@ class Todo extends JsonResource
         return [
             'id'=>$this->id,
             'title'=>$this->title,
-            'is_completed'=> $this->is_completed
+            'is_completed'=> $this->is_completed,
+            'created_at'=> Carbon::parse($this->created_at)->diffForHumans()
+            
         ];
     }
 }

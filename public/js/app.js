@@ -1842,7 +1842,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      title: ""
+    };
+  },
+  methods: {
+    saveTodo: function saveTodo() {
+      var todo = {
+        title: this.title
+      };
+      this.$emit("create-todo", todo);
+      this.title = "";
+    }
+  }
+});
 
 /***/ }),
 
@@ -1858,6 +1891,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TodoListComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TodoListComponent */ "./resources/js/components/TodoListComponent.vue");
 /* harmony import */ var _NavBarComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavBarComponent */ "./resources/js/components/NavBarComponent.vue");
 /* harmony import */ var _CreateTodoComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CreateTodoComponent */ "./resources/js/components/CreateTodoComponent.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1904,6 +1949,18 @@ __webpack_require__.r(__webpack_exports__);
       todos: {}
     };
   },
+  computed: {
+    completed_todos: function completed_todos() {
+      if (this.todos.length > 0) {
+        return this.todos.filter(function (todo) {
+          return todo.is_completed == 1;
+        }).length;
+      }
+    },
+    total_todos: function total_todos() {
+      return this.todos.length;
+    }
+  },
   methods: {
     fetchTodos: function fetchTodos() {
       var _this = this;
@@ -1944,6 +2001,27 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err);
         alert("An Error has Occured! Please try again");
       });
+    },
+    createTodo: function createTodo(todo) {
+      var _this4 = this;
+
+      $(".overlay").css("display", "block");
+      fetch("api/todos", {
+        method: "POST",
+        body: JSON.stringify(todo),
+        headers: {
+          "content-type": "application/json"
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        _this4.fetchTodos();
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    },
+    updateTodo: function updateTodo(todo) {
+      $(".");
     }
   }
 });
@@ -2042,6 +2120,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["todo"],
   methods: {
@@ -2061,6 +2141,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TodoItem__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TodoItem */ "./resources/js/components/TodoItem.vue");
+//
 //
 //
 //
@@ -6560,7 +6641,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.is-completed[data-v-263df564] {\r\n  text-decoration: line-through !important;\n}\n.delete-icon[data-v-263df564] {\r\n  color: rgb(255, 96, 79);\r\n  font-size: 1.3em;\r\n  text-align: right;\n}\n.fa-trash[data-v-263df564] {\r\n  transition: 0.2s;\r\n  cursor: pointer;\n}\n.fa-trash[data-v-263df564]:hover {\r\n  transform: scale(1.2, 1.2);\n}\r\n", ""]);
+exports.push([module.i, "\n.is-completed[data-v-263df564] {\r\n  text-decoration: line-through !important;\n}\n.icons[data-v-263df564] {\r\n  text-align: center;\n}\n.delete-icon[data-v-263df564] {\r\n  color: rgb(255, 96, 79);\r\n  font-size: 1.3em;\r\n  margin-right: 10px;\n}\n.update-icon[data-v-263df564] {\r\n  color: rgba(255, 196, 0, 0.767);\r\n  font-size: 1.3em;\n}\n.fa-trash[data-v-263df564],\r\n.fa-pen[data-v-263df564] {\r\n  transition: 0.2s;\r\n  cursor: pointer;\n}\n.fa-trash[data-v-263df564]:hover,\r\n.fa-pen[data-v-263df564]:hover {\r\n  transform: scale(1.2, 1.2);\n}\r\n", ""]);
 
 // exports
 
@@ -38072,9 +38153,63 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c(
+      "form",
+      {
+        staticClass: "form",
+        attrs: { method: "POST" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.saveTodo($event)
+          }
+        }
+      },
+      [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-9 px-0" }, [
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.title,
+                    expression: "title"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { placeholder: "What should you do?", type: "text" },
+                domProps: { value: _vm.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.title = $event.target.value
+                  }
+                }
+              })
+            ])
+          ]),
+          _vm._v(" "),
+          _vm._m(0)
+        ])
+      ]
+    )
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-3 pl-2 pr-0" }, [
+      _c("button", { staticClass: "btn btn-primary w-100" }, [_vm._v("Save")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -38107,7 +38242,30 @@ var render = function() {
         _c("br"),
         _vm._v(" "),
         _c("div", { staticClass: "row justify-content-center" }, [
-          _c("div", { staticClass: "col-lg-6" }, [_c("CreateTodo")], 1)
+          _c("div", { staticClass: "px-0 col-lg-6" }, [
+            _c(
+              "div",
+              {
+                staticClass: "shadow card",
+                staticStyle: { border: "none", padding: "10px 30px" }
+              },
+              [
+                _c("CreateTodo", { on: { "create-todo": _vm.createTodo } }),
+                _vm._v(" "),
+                _c("p", [
+                  _vm._v("\n            Completed:\n            "),
+                  _c("span", [
+                    _vm._v(
+                      _vm._s(_vm.completed_todos) +
+                        " / " +
+                        _vm._s(_vm.total_todos)
+                    )
+                  ])
+                ])
+              ],
+              1
+            )
+          ])
         ]),
         _vm._v(" "),
         _c("br"),
@@ -38119,7 +38277,11 @@ var render = function() {
             [
               _c("TodoList", {
                 attrs: { todos: _vm.todos },
-                on: { "del-todo": _vm.delTodo, "toggle-todo": _vm.toggleTodo }
+                on: {
+                  "update-todo": _vm.updateTodo,
+                  "del-todo": _vm.delTodo,
+                  "toggle-todo": _vm.toggleTodo
+                }
               })
             ],
             1
@@ -38279,16 +38441,29 @@ var render = function() {
                 },
                 [_vm._v(_vm._s(_vm.todo.title))]
               )
+            ]),
+            _vm._v(" "),
+            _c("small", { staticClass: "text-muted" }, [
+              _vm._v(_vm._s(_vm.todo.created_at))
             ])
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-3" }, [
-            _c("p", { staticClass: "delete-icon" }, [
+            _c("p", { staticClass: "icons" }, [
               _c("i", {
-                staticClass: "fas fa-trash",
+                staticClass: "fas fa-trash delete-icon",
                 on: {
                   click: function($event) {
                     return _vm.$emit("del-todo", _vm.todo.id)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("i", {
+                staticClass: "fas fa-pen update-icon",
+                on: {
+                  click: function($event) {
+                    return _vm.$emit("update-todo", _vm.todo)
                   }
                 }
               })
@@ -38348,6 +38523,9 @@ var render = function() {
             on: {
               "del-todo": function($event) {
                 return _vm.$emit("del-todo", todo.id)
+              },
+              "update-todo": function($event) {
+                return _vm.$emit("update-todo", todo.id)
               },
               "toggle-todo": function($event) {
                 return _vm.$emit("toggle-todo", todo.id)
@@ -50999,8 +51177,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Rustine Dave\documents\laravel_apps\vuetodo\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Rustine Dave\documents\laravel_apps\vuetodo\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Rustine Dave\Documents\laravel_apps\vuetodo\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Rustine Dave\Documents\laravel_apps\vuetodo\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
