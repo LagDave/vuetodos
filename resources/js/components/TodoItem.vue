@@ -30,7 +30,7 @@
         <div class="col-3">
           <p class="icons">
             <i @click="$emit('del-todo', todo.id)" class="fas fa-trash delete-icon"></i>
-            <i @click="$emit('update-todo', todo)" class="fas fa-pen update-icon"></i>
+            <i @click="$emit('edit-todo', todo)" class="fas fa-pen update-icon"></i>
           </p>
         </div>
       </div>
