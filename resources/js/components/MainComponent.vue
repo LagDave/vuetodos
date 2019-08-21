@@ -13,7 +13,7 @@
       <div class="row justify-content-center">
         <div class="px-0 col-lg-6">
           <div class="shadow card" style="border:none; padding:10px 30px">
-            <CreateTodo @create-todo="createTodo" />
+            <CreateTodo ref="createTodo" @create-todo="createTodo" @updateTodo="updateTodo" />
             <!-- Completed/Total -->
             <p>
               Completed:
@@ -26,7 +26,7 @@
       <div class="row justify-content-center">
         <div class="shadow main-wrapper col-lg-6">
           <TodoList
-            @update-todo="updateTodo"
+            @edit-todo="editTodo"
             @del-todo="delTodo"
             @toggle-todo="toggleTodo"
             v-bind:todos="todos"
@@ -118,8 +118,39 @@ export default {
         })
         .catch(err => console.log(err));
     },
+    createTodo(todo) {
+      $(".overlay").css("display", "block");
+      fetch("api/todos", {
+        method: "POST",
+        body: JSON.stringify(todo),
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(res => {
+          this.fetchTodos();
+        })
+        .catch(err => console.log(err));
+    },
+    editTodo(todo) {
+      this.$refs.createTodo.title = todo.title
+      this.$refs.createTodo.id = todo.id
+    },
     updateTodo(todo) {
-      $(".");
+      $(".overlay").css("display", "block");
+      fetch(`api/todos/${todo.id}`, {
+        method: "PUT",
+        body: JSON.stringify(todo),
+        headers: {
+          "content-type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(res => {
+          this.fetchTodos();
+        })
+        .catch(err => console.log(err));
     }
   }
 };

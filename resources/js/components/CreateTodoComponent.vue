@@ -24,16 +24,24 @@
 export default {
   data() {
     return {
+      id: "",
       title: ""
     };
   },
   methods: {
     saveTodo() {
       const todo = {
+        id: this.id,
         title: this.title
       };
-      this.$emit("create-todo", todo);
+      if (this.id !== '') {
+        // update code goes here
+        this.$emit('updateTodo', todo)
+      } else {
+        this.$emit("create-todo", todo);
+      }
       this.title = "";
+      this.id = ""
     }
   }
 };

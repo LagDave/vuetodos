@@ -1863,16 +1863,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      id: "",
       title: ""
     };
   },
   methods: {
     saveTodo: function saveTodo() {
       var todo = {
+        id: this.id,
         title: this.title
       };
-      this.$emit("create-todo", todo);
+
+      if (this.id !== '') {
+        // update code goes here
+        this.$emit('updateTodo', todo);
+      } else {
+        this.$emit("create-todo", todo);
+      }
+
       this.title = "";
+      this.id = "";
     }
   }
 });
@@ -1891,6 +1901,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TodoListComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TodoListComponent */ "./resources/js/components/TodoListComponent.vue");
 /* harmony import */ var _NavBarComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavBarComponent */ "./resources/js/components/NavBarComponent.vue");
 /* harmony import */ var _CreateTodoComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CreateTodoComponent */ "./resources/js/components/CreateTodoComponent.vue");
+var _methods;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1961,7 +1975,7 @@ __webpack_require__.r(__webpack_exports__);
       return this.todos.length;
     }
   },
-  methods: {
+  methods: (_methods = {
     fetchTodos: function fetchTodos() {
       var _this = this;
 
@@ -2019,11 +2033,45 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         return console.log(err);
       });
-    },
-    updateTodo: function updateTodo(todo) {
-      $(".");
     }
-  }
+  }, _defineProperty(_methods, "createTodo", function createTodo(todo) {
+    var _this5 = this;
+
+    $(".overlay").css("display", "block");
+    fetch("api/todos", {
+      method: "POST",
+      body: JSON.stringify(todo),
+      headers: {
+        "content-type": "application/json"
+      }
+    }).then(function (res) {
+      return res.json();
+    }).then(function (res) {
+      _this5.fetchTodos();
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  }), _defineProperty(_methods, "editTodo", function editTodo(todo) {
+    this.$refs.createTodo.title = todo.title;
+    this.$refs.createTodo.id = todo.id;
+  }), _defineProperty(_methods, "updateTodo", function updateTodo(todo) {
+    var _this6 = this;
+
+    $(".overlay").css("display", "block");
+    fetch("api/todos/".concat(todo.id), {
+      method: "PUT",
+      body: JSON.stringify(todo),
+      headers: {
+        "content-type": "application/json"
+      }
+    }).then(function (res) {
+      return res.json();
+    }).then(function (res) {
+      _this6.fetchTodos();
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  }), _methods)
 });
 
 /***/ }),
@@ -6622,7 +6670,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.main-wrapper {\r\n  background: white;\r\n  padding: 20px;\r\n  border-radius: 10px;\n}\n.overlay {\r\n  left: 0;\r\n  top: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  position: fixed;\r\n  background: #222;\r\n  z-index: 999;\r\n  display: none;\n}\n.overlay__inner {\r\n  left: 0;\r\n  top: 0;\r\n  width: 100%;\r\n  height: 100%;\r\n  position: absolute;\n}\n.overlay__content {\r\n  left: 50%;\r\n  position: absolute;\r\n  top: 50%;\r\n  transform: translate(-50%, -50%);\n}\n.spinner {\r\n  width: 75px;\r\n  height: 75px;\r\n  display: inline-block;\r\n  border-width: 2px;\r\n  border-color: rgba(255, 255, 255, 0.05);\r\n  border-top-color: #fff;\r\n  -webkit-animation: spin 1s infinite linear;\r\n          animation: spin 1s infinite linear;\r\n  border-radius: 100%;\r\n  border-style: solid;\n}\n@-webkit-keyframes spin {\n100% {\r\n    transform: rotate(360deg);\n}\n}\n@keyframes spin {\n100% {\r\n    transform: rotate(360deg);\n}\n}\r\n", ""]);
+exports.push([module.i, "\n.main-wrapper {\n  background: white;\n  padding: 20px;\n  border-radius: 10px;\n}\n.overlay {\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  position: fixed;\n  background: #222;\n  z-index: 999;\n  display: none;\n}\n.overlay__inner {\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  position: absolute;\n}\n.overlay__content {\n  left: 50%;\n  position: absolute;\n  top: 50%;\n  transform: translate(-50%, -50%);\n}\n.spinner {\n  width: 75px;\n  height: 75px;\n  display: inline-block;\n  border-width: 2px;\n  border-color: rgba(255, 255, 255, 0.05);\n  border-top-color: #fff;\n  -webkit-animation: spin 1s infinite linear;\n          animation: spin 1s infinite linear;\n  border-radius: 100%;\n  border-style: solid;\n}\n@-webkit-keyframes spin {\n100% {\n    transform: rotate(360deg);\n}\n}\n@keyframes spin {\n100% {\n    transform: rotate(360deg);\n}\n}\n", ""]);
 
 // exports
 
@@ -6641,7 +6689,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.is-completed[data-v-263df564] {\r\n  text-decoration: line-through !important;\n}\n.icons[data-v-263df564] {\r\n  text-align: center;\n}\n.delete-icon[data-v-263df564] {\r\n  color: rgb(255, 96, 79);\r\n  font-size: 1.3em;\r\n  margin-right: 10px;\n}\n.update-icon[data-v-263df564] {\r\n  color: rgba(255, 196, 0, 0.767);\r\n  font-size: 1.3em;\n}\n.fa-trash[data-v-263df564],\r\n.fa-pen[data-v-263df564] {\r\n  transition: 0.2s;\r\n  cursor: pointer;\n}\n.fa-trash[data-v-263df564]:hover,\r\n.fa-pen[data-v-263df564]:hover {\r\n  transform: scale(1.2, 1.2);\n}\r\n", ""]);
+exports.push([module.i, "\n.is-completed[data-v-263df564] {\n  text-decoration: line-through !important;\n}\n.icons[data-v-263df564] {\n  text-align: center;\n}\n.delete-icon[data-v-263df564] {\n  color: rgb(255, 96, 79);\n  font-size: 1.3em;\n  margin-right: 10px;\n}\n.update-icon[data-v-263df564] {\n  color: rgba(255, 196, 0, 0.767);\n  font-size: 1.3em;\n}\n.fa-trash[data-v-263df564],\n.fa-pen[data-v-263df564] {\n  transition: 0.2s;\n  cursor: pointer;\n}\n.fa-trash[data-v-263df564]:hover,\n.fa-pen[data-v-263df564]:hover {\n  transform: scale(1.2, 1.2);\n}\n", ""]);
 
 // exports
 
@@ -38250,7 +38298,13 @@ var render = function() {
                 staticStyle: { border: "none", padding: "10px 30px" }
               },
               [
-                _c("CreateTodo", { on: { "create-todo": _vm.createTodo } }),
+                _c("CreateTodo", {
+                  ref: "createTodo",
+                  on: {
+                    "create-todo": _vm.createTodo,
+                    updateTodo: _vm.updateTodo
+                  }
+                }),
                 _vm._v(" "),
                 _c("p", [
                   _vm._v("\n            Completed:\n            "),
@@ -38278,7 +38332,7 @@ var render = function() {
               _c("TodoList", {
                 attrs: { todos: _vm.todos },
                 on: {
-                  "update-todo": _vm.updateTodo,
+                  "edit-todo": _vm.editTodo,
                   "del-todo": _vm.delTodo,
                   "toggle-todo": _vm.toggleTodo
                 }
@@ -38463,7 +38517,7 @@ var render = function() {
                 staticClass: "fas fa-pen update-icon",
                 on: {
                   click: function($event) {
-                    return _vm.$emit("update-todo", _vm.todo)
+                    return _vm.$emit("edit-todo", _vm.todo)
                   }
                 }
               })
@@ -38524,8 +38578,8 @@ var render = function() {
               "del-todo": function($event) {
                 return _vm.$emit("del-todo", todo.id)
               },
-              "update-todo": function($event) {
-                return _vm.$emit("update-todo", todo.id)
+              "edit-todo": function($event) {
+                return _vm.$emit("edit-todo", todo)
               },
               "toggle-todo": function($event) {
                 return _vm.$emit("toggle-todo", todo.id)
@@ -51177,8 +51231,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Rustine Dave\Documents\laravel_apps\vuetodo\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Rustine Dave\Documents\laravel_apps\vuetodo\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /home/kirame/Documents/Projects/vuetodos/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /home/kirame/Documents/Projects/vuetodos/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
